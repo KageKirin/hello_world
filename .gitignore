@@ -1,0 +1,23 @@
+## .gitignore for bactra
+
+*.ninja
+.ninja_deps
+.ninja_log
+
+*.bfbs
+
+# macOS
+.DS_Store
+
+
+## build dir
+bin/
+build/
+zig-cache/
+zig-out/
+
+## .meta files
+*.meta
+
+## libs (use add --force to add)
+#libs

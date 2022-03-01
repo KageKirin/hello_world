@@ -80,5 +80,6 @@ All limitations from GENie and the respective compiler, build systems apply.
 
 There are a few edge cases, like e.g. ninja files generated to target Windows will contain `cmd /c` command prefixes,
 which are incompatible with everything not Windows.
+These get replaced after generation with the POSIX equivalent, `bash -c`.
 Similarly, ninja files _not_ targeting Windows _will not_ contain `cmd /c` prefixes, making them probably incompatible
 with DOS or PowerShell.

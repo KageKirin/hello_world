@@ -49,6 +49,16 @@ CONFIG?=debug
 
 COMPILER?=clang
 
+ifeq ($(TARGET_OS),windows)
+ifeq ($(HOST_OS),windws)
+PATCH_CMD_C=
+else
+PATCH_CMD_C=sed -i "" -e "s|cmd\ /c|bash -c|g" `rg -l "cmd /c" $(1)/*/*`
+endif # ifeq ($(HOST_OS),windws)
+else
+PATCH_CMD_C=
+endif # ifeq ($(TARGET_OS),windows)
+
 
 ## default rules
 
@@ -110,6 +120,7 @@ projgen-macosx projgen-macos projgen-osx projgen-darwin:	build/$(COMPILER).$(PRO
 # GCC
 build/gcc.$(PROJECT_TYPE).windows:
 	$(SILENT) $(GENIE) --to=../build/gcc.$(PROJECT_TYPE).windows --toolchain=windows --os=windows  --cc=gcc --platform=x64         $(GENIE_OPTIONS) $(PROJECT_TYPE)
+	$(call PATCH_CMD_C,$@)
 
 build/gcc.$(PROJECT_TYPE).linux:
 	$(SILENT) $(GENIE) --to=../build/gcc.$(PROJECT_TYPE).linux   --toolchain=linux   --os=linux    --cc=gcc                        $(GENIE_OPTIONS) $(PROJECT_TYPE)
@@ -126,6 +137,7 @@ build/gcc.$(PROJECT_TYPE).darwin:
 # Clang
 build/clang.$(PROJECT_TYPE).windows:
 	$(SILENT) $(GENIE) --to=../build/clang.$(PROJECT_TYPE).windows --toolchain=windows --os=windows  --cc=clang --platform=x64         $(GENIE_OPTIONS) $(PROJECT_TYPE)
+	$(call PATCH_CMD_C,$@)
 
 build/clang.$(PROJECT_TYPE).linux:
 	$(SILENT) $(GENIE) --to=../build/clang.$(PROJECT_TYPE).linux   --toolchain=linux   --os=linux    --cc=clang                        $(GENIE_OPTIONS) $(PROJECT_TYPE)
@@ -142,6 +154,7 @@ build/clang.$(PROJECT_TYPE).darwin:
 # Zig
 build/zig.$(PROJECT_TYPE).windows:
 	$(SILENT) $(GENIE) --to=../build/zig.$(PROJECT_TYPE).windows --toolchain=windows --os=windows  --cc=zig --zig-target=x86_64-windows-gnu       $(GENIE_OPTIONS) $(PROJECT_TYPE)
+	$(call PATCH_CMD_C,$@)
 
 build/zig.$(PROJECT_TYPE).linux:
 	$(SILENT) $(GENIE) --to=../build/zig.$(PROJECT_TYPE).linux   --toolchain=linux   --os=linux    --cc=zig --zig-target=x86_64-linux-musl        $(GENIE_OPTIONS) $(PROJECT_TYPE)
